@@ -1,8 +1,9 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import * as bodyParser from "body-parser";
 import cors from "cors";
 
 import meta from "./meta";
+import errorTest from "./errorTest";
 
 const router = Router();
 
@@ -13,10 +14,6 @@ router.use(cors({ credentials: true, origin: true }));
 
 // routes
 router.use("/meta", meta);
-
-// Should not be used like this
-router.get("/hello", (request: Request, response: Response) => {
-  response.send(request.body);
-});
+router.use("/error", errorTest);
 
 export default router as Router;

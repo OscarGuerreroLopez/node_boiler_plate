@@ -1,8 +1,16 @@
 import { Router } from "express";
-import { getError } from "../handlers/errorTest";
+import {
+  getErrorOne,
+  getErrorTwo,
+  getErrorThree,
+  getErrorFour,
+} from "../handlers/errorTest";
 
 const router = Router();
 
-router.get("/", getError);
+router.get("/one", getErrorOne);
+router.get("/two", getErrorTwo);
+router.get("/three", getErrorThree);
+router.get("/four", getErrorFour);
 
 export default router;
