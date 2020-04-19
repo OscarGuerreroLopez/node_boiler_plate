@@ -1,11 +1,11 @@
 import express from "express";
+
 import { EnvVars } from "./utils/validateEnv";
 
 import Router from "./router";
 import { LoggerMiddleware } from "./middleware";
 
 const app = express();
-
 app.use(LoggerMiddleware);
 app.use("/", Router);
 
