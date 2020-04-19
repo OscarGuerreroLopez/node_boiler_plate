@@ -6,6 +6,7 @@ const getEnvVars = (): EnvObject => {
     PORT: num({ default: 5000 }),
     REDIS_PORT: num({ default: 6379 }),
     REDIS_HOST: str({ default: "localhost" }),
+    JWT_SECRET: str(),
   });
 
   return EnvVars as EnvObject;

@@ -33,3 +33,11 @@ export const getErrorFour: Handler = (
 ) => {
   next(new UserNotFoundException("hh573hsheHGsh"));
 };
+
+export const getErrorFive: Handler = (
+  _request: Request,
+  _response: Response,
+  _next: NextFunction,
+) => {
+  throw new Error("I am a new Error");
+};
