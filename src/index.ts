@@ -14,6 +14,21 @@ app.use("/", Router);
 
 app.use(errorHandler);
 
+process.on("uncaughtException", (e: any) => {
+  console.log(
+    "@@@@@@@@@@uncaughtException better to log error before exiting",
+    e,
+  );
+  process.exit(1);
+});
+process.on("unhandledRejection", (e: any) => {
+  console.log(
+    "@@@@@@@@@@unhandledRejection better to log error before exiting",
+    e,
+  );
+  process.exit(1);
+});
+
 app.listen(EnvVars.PORT, () => {
   console.log(`Server is running http://localhost:${EnvVars.PORT}...`);
 });
