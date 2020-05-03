@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 
 import { RedisClient } from "../utils/redis";
 import HttpException from "../exceptions/HttpException";
+import { WinstonLoggerWrapper } from "../utils/winstonLogger";
 
 const rateLimiter = new RateLimiterRedis({
   redis: RedisClient,
@@ -22,7 +23,14 @@ export const RateLimiterMiddleware = (
     .then(() => {
       next();
     })
-    .catch(() => {
+    .catch((error: any) => {
+      console.log("@@@@", error);
+      WinstonLoggerWrapper({
+        level: "error",
+        message: `Too many requests from ${req.clientIp}`,
+        identifier: "RateLimiter",
+      });
+
       next(new HttpException(429, "Way too many requests sorry"));
     });
 };

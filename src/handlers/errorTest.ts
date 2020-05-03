@@ -1,6 +1,7 @@
 import { Handler, Response, Request, NextFunction } from "express";
 import HttpException from "../exceptions/HttpException";
 import UserNotFoundException from "../exceptions/UserNotFoundException";
+import { WinstonLoggerWrapper } from "../utils/winstonLogger";
 
 import { TimerBomb } from "../utils/timerBomb";
 
@@ -51,4 +52,26 @@ export const getErrorSix: Handler = async (
 ) => {
   const result = await TimerBomb();
   response.send(result);
+};
+
+export const getErrorSeven: Handler = async (
+  _request: Request,
+  response: Response,
+  _next: NextFunction,
+) => {
+  try {
+    const result = await TimerBomb();
+    response.send(result);
+  } catch (error) {
+    WinstonLoggerWrapper({
+      level: "warn",
+      message: error.message || error,
+      identifier: "ErrorTest",
+      status: 401,
+      stack: error.stack,
+    });
+    response.status(401).json({
+      message: "Sorry but something went wrong, real error should be logged",
+    });
+  }
 };

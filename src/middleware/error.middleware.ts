@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import HttpException from "../exceptions/HttpException";
+import { WinstonLoggerWrapper } from "../utils/winstonLogger";
 
 export const errorMiddleware = (
   error: HttpException,
@@ -10,6 +11,13 @@ export const errorMiddleware = (
 ) => {
   const status = error.status || 500;
   const message = error.message || "Something went wrong";
+
+  WinstonLoggerWrapper({
+    level: "error",
+    message,
+    status,
+    identifier: "ErrorMiddleware",
+  });
 
   response.status(status).send({
     status,
