@@ -2,17 +2,20 @@ import express from "express";
 import requestIp from "request-ip";
 
 import { EnvVars } from "./utils/validateEnv";
-import errorHandler from "./middleware/error.middleware";
+import * as middleware from "./middleware";
 
 import Router from "./router";
 import { LoggerMiddleware } from "./middleware";
 
 const app = express();
+
 app.use(requestIp.mw());
+app.use(middleware.RateLimiterMiddleware);
+
 app.use(LoggerMiddleware);
 app.use("/", Router);
 
-app.use(errorHandler);
+app.use(middleware.errorMiddleware);
 
 process.on("uncaughtException", (e: any) => {
   console.log(
