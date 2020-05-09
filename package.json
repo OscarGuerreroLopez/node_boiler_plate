@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node dist/src",
     "start:dev": "tsc -w & nodemon -q -w dist dist/src/index.js",
-    "build": "rimraf dist && tsc --build tsconfig.json"
+    "build": "rimraf dist && tsc --build tsconfig.json",
+    "start:tsnode": "ts-node-dev --respawn src/index.ts",
+    "start:nodemon": "nodemon --exec ts-node src/index.ts"
   },
   "keywords": [],
   "author": "oscarlopez75 <oscar.computer.guy@gmail.com>",

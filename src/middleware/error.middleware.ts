@@ -17,6 +17,7 @@ export const errorMiddleware = (
     message,
     status,
     identifier: "ErrorMiddleware",
+    stack: JSON.stringify(error),
   });
 
   response.status(status).send({

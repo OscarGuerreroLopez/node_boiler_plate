@@ -6,6 +6,7 @@ import * as middleware from "./middleware";
 
 import Router from "./router";
 import { LoggerMiddleware } from "./middleware";
+import { WinstonLoggerWrapper } from "./utils/winstonLogger";
 
 const app = express();
 
@@ -18,17 +19,25 @@ app.use("/", Router);
 app.use(middleware.errorMiddleware);
 
 process.on("uncaughtException", (e: any) => {
-  console.log(
-    "@@@@@@@@@@uncaughtException better to log error before exiting",
-    e,
-  );
+  WinstonLoggerWrapper({
+    level: "error",
+    message: "@@@@@@@@@@unhandledRejection better to log error before exiting",
+    status: 500,
+    identifier: "UncaughtException",
+    stack: e,
+  });
+
   process.exit(1);
 });
+
 process.on("unhandledRejection", (e: any) => {
-  console.log(
-    "@@@@@@@@@@unhandledRejection better to log error before exiting",
-    e,
-  );
+  WinstonLoggerWrapper({
+    level: "error",
+    message: "@@@@@@@@@@unhandledRejection better to log error before exiting",
+    status: 500,
+    identifier: "UnhandledRejection",
+    stack: e,
+  });
   process.exit(1);
 });
 

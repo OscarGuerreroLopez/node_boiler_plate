@@ -6,7 +6,7 @@ export const WinstonLoggerWrapper = (data: Logger) => {
   const message = JSON.stringify({
     message: data.message,
     status: data.status || undefined,
-    stack: data.stack,
+    stack: data.stack || "No stack",
     identifier: data.identifier,
   });
 

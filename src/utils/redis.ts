@@ -8,10 +8,10 @@ export const RedisClient = redis.createClient({
 });
 
 RedisClient.on("connect", () => {
-  console.log("Redis client connected for Login");
+  console.log("Redis client connected for BolierPlate");
 });
 
 RedisClient.on("error", (err: any) => {
-  console.log("Error connecting to Redis from Login", { data: err });
+  console.log("Error connecting to Redis from BolierPlate", { data: err });
   process.exit(1);
 });

@@ -16,13 +16,15 @@ declare global {
     | "LoggerMiddleware"
     | "ErrorMiddleware"
     | "RateLimiter"
-    | "ErrorTest";
+    | "ErrorTest"
+    | "UnhandledRejection"
+    | "UncaughtException";
 
   interface Logger {
     level: LoggerLevel;
     message: string;
     status?: number;
-    stack?: IObjectLiteral;
+    stack?: string;
     identifier: LoggerIdentifier;
   }
 }
