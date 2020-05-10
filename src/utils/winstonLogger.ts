@@ -1,12 +1,12 @@
 import * as winston from "winston";
 
-const { combine, timestamp, prettyPrint } = winston.format;
+const { combine, timestamp, printf, label } = winston.format;
 
 export const WinstonLoggerWrapper = (data: Logger) => {
   const message = JSON.stringify({
     message: data.message,
     status: data.status || undefined,
-    stack: data.stack || "No stack",
+    stack: data.stack,
     identifier: data.identifier,
   });
 
@@ -16,9 +16,13 @@ export const WinstonLoggerWrapper = (data: Logger) => {
   });
 };
 
+const myFormat = printf(({ level, message, label, timestamp }) => {
+  return `${timestamp} [${label}] ${level}: ${message}`;
+});
+
 const winstonLogger = winston.createLogger({
   level: "info",
-  format: combine(timestamp(), prettyPrint()),
+  format: combine(label({ label: "boiler plate" }), timestamp(), myFormat),
   defaultMeta: { service: "boilerplate" },
   transports: [
     new winston.transports.File({

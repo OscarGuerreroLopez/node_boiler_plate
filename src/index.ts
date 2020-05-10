@@ -1,3 +1,11 @@
+import apm from "elastic-apm-node";
+
+apm.start({
+  serviceName: "boilerPlate",
+  secretToken: "",
+  serverUrl: "http://localhost:8200",
+});
+
 import express from "express";
 import requestIp from "request-ip";
 
