@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 // tslint:disable-next-line:no-var-requires
 const { RateLimiterRedis } = require("rate-limiter-flexible");
 import { Request, Response, NextFunction } from "express";
@@ -17,14 +18,13 @@ export const RateLimiterMiddleware = (
   req: Request,
   _res: Response,
   next: NextFunction,
-) => {
+): void => {
   rateLimiter
     .consume(req.clientIp)
     .then(() => {
       next();
     })
     .catch((error: any) => {
-      console.log("@@@@", error);
       WinstonLoggerWrapper({
         level: "error",
         message: `Too many requests from ${req.clientIp}`,
