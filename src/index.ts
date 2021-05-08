@@ -1,14 +1,21 @@
 import express from "express";
+import apm from "elastic-apm-node";
+import { EnvVars } from "./utils";
+
+apm.start({
+  active: EnvVars.APM_ENABLE,
+  serviceName: EnvVars.ES_INDEX,
+  serverUrl: EnvVars.APM_URL,
+});
 import requestIp from "request-ip";
 import cors from "cors";
 import helmet from "helmet";
-import swaggerUi from "swagger-ui-express";
+// import swaggerUi from "swagger-ui-express";
 
-import { EnvVars } from "./utils/validateEnv";
 import * as middleware from "./middleware";
 import Router from "./router";
 
-import { WinstonLoggerWrapper } from "./utils/winstonLogger";
+import { Logger } from "./utils";
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -25,28 +32,37 @@ app.use("/", Router);
 app.use(middleware.errorMiddleware);
 
 process.on("uncaughtException", (e: any) => {
-  WinstonLoggerWrapper({
-    level: "error",
-    message: "@@@@@@@@@@unhandledRejection better to log error before exiting",
-    status: 500,
-    identifier: "UncaughtException",
-    stack: e,
+  Logger.error(e.message || "uncaughtException", {
+    message: "uncaughtException",
+    error: {
+      message: e.message || "no error message",
+      stack: e.stack || "no stack",
+    },
   });
 
-  process.exit(1);
+  Logger.on("finish", () => process.exit(1));
+
+  setTimeout(() => {
+    Logger.end();
+  }, 2000);
 });
 
 process.on("unhandledRejection", (e: any) => {
-  WinstonLoggerWrapper({
-    level: "error",
-    message: "@@@@@@@@@@unhandledRejection better to log error before exiting",
-    status: 500,
-    identifier: "UnhandledRejection",
-    stack: e,
+  Logger.error(e.message || "unhandledRejection", {
+    message: "unhandledRejection",
+    error: {
+      message: e.message || "no error message",
+      stack: e.stack || "no stack",
+    },
   });
-  process.exit(1);
+
+  Logger.on("finish", () => process.exit(1));
+
+  setTimeout(() => {
+    Logger.end();
+  }, 2000);
 });
 
 app.listen(EnvVars.PORT, () => {
-  console.log(`Server is running http://localhost:${EnvVars.PORT}...`);
+  Logger.info(`Server is running http://localhost:${EnvVars.PORT}...`);
 });

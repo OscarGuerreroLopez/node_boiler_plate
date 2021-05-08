@@ -1,4 +1,4 @@
-import { cleanEnv, str, num } from "envalid";
+import { cleanEnv, str, num, bool } from "envalid";
 
 const getEnvVars = (): EnvObject => {
   const EnvVars = cleanEnv(process.env, {
@@ -6,7 +6,11 @@ const getEnvVars = (): EnvObject => {
     PORT: num({ default: 5000 }),
     REDIS_PORT: num({ default: 6379 }),
     REDIS_HOST: str({ default: "localhost" }),
-    JWT_SECRET: str(),
+    ES_INDEX: str(),
+    ES_NODE: str(),
+    LOG_LEVEL: str(),
+    APM_URL: str(),
+    APM_ENABLE: bool({ default: false }),
   });
 
   return EnvVars as EnvObject;

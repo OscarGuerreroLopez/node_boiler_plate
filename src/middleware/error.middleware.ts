@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import HttpException from "../exceptions/HttpException";
-import { WinstonLoggerWrapper } from "../utils/winstonLogger";
+import { WinstonLoggerWrapper } from "../utils/logger";
 
 export const errorMiddleware = (
   error: HttpException,

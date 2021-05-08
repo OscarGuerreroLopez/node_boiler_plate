@@ -2,10 +2,9 @@
 // tslint:disable-next-line:no-var-requires
 const { RateLimiterRedis } = require("rate-limiter-flexible");
 import { Request, Response, NextFunction } from "express";
-
+import { Logger } from "../utils/logger";
 import { RedisClient } from "../utils/redis";
 import HttpException from "../exceptions/HttpException";
-import { WinstonLoggerWrapper } from "../utils/winstonLogger";
 
 const rateLimiter = new RateLimiterRedis({
   redis: RedisClient,
@@ -25,12 +24,14 @@ export const RateLimiterMiddleware = (
       next();
     })
     .catch((error: any) => {
-      WinstonLoggerWrapper({
-        level: "error",
-        message: `Too many requests from ${req.clientIp}`,
+      Logger.error(`Too many requests from ${req.clientIp} orch`, {
         identifier: "RateLimiter",
+        error: {
+          message: error.message || "no error message",
+          stack: error.stack || "no stack",
+        },
       });
 
-      next(new HttpException(429, "Way too many requests sorry"));
+      next(new HttpException(429, "Way too many requests sorry orch"));
     });
 };
