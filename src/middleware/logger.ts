@@ -15,7 +15,9 @@ export const LoggerMiddleware = (
     request.originalIp =
       (request.headers.originalip as string) || request.clientIp || request.ip;
     request.originalUserAgent =
-      (request.headers.originaluseragent as string) || "no user agent";
+      (request.headers.originaluseragent as string) ||
+      request.headers["user-agent"] ||
+      "no user agent";
     request.originalMethod =
       (request.headers.originalmethod as string) || request.method;
     request.originalPath =
